@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wotd/components/drawer.dart';
+import 'package:wotd/screens/home_screen/home_screen.dart';
 
 class Nav extends StatefulWidget {
   @override
@@ -10,7 +11,7 @@ class Nav extends StatefulWidget {
 class _NavState extends State<Nav> {
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
-    Text('WOTD'),
+    Home(),
     Text('Past Words'),
   ];
   void _onItemTapped(int index) {
