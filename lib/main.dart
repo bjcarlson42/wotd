@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wotd/components/nav.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Color(0xffffffff),
       ),
       debugShowCheckedModeBanner: false,
-      home: Text('Home'),
+      home: Nav(),
     );
   }
 }
