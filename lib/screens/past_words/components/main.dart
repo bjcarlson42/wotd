@@ -5,6 +5,7 @@ import 'package:wotd/key.dart';
 import 'package:wotd/models/definition.dart';
 import 'dart:convert';
 import 'package:wotd/models/word.dart';
+import 'package:wotd/models/saved_words.dart';
 
 var now = new DateTime.now();
 var formatter = new DateFormat('yyyy-MM-dd');
@@ -31,12 +32,14 @@ Future<List<Word>> getAllWords() async {
 }
 
 class Main extends StatefulWidget {
+  static final _savedWords = SavedWords.savedWords;
   @override
   _MainState createState() => _MainState();
 }
 
 class _MainState extends State<Main> {
   Future<List<Word>> futureWord;
+  var _savedWords = Main._savedWords;
   @override
   void initState() {
     super.initState();
@@ -87,6 +90,7 @@ class _MainState extends State<Main> {
   }
 
   Widget wordTemplate(word) {
+    final alreadySaved = _savedWords.contains(word.word);
     return Padding(
       padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
       child: Card(
@@ -119,7 +123,25 @@ class _MainState extends State<Main> {
                   Row(
                     children: [
                       Icon(Icons.share),
-                      Icon(Icons.favorite),
+                      IconButton(
+                        icon: Icon(
+                          alreadySaved ? Icons.favorite : Icons.favorite_border,
+                          color: alreadySaved ? Colors.red : null,
+                        ),
+                        onPressed: () => {
+                          setState(() {
+                            if (alreadySaved) {
+                              print('Removing: ' + word.word);
+                              _savedWords.remove(word.word);
+                              print(_savedWords);
+                            } else {
+                              print('Adding: ' + word.word);
+                              _savedWords.add(word.word);
+                              print(_savedWords);
+                            }
+                          })
+                        },
+                      ),
                     ],
                   ),
                 ],

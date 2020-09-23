@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:wotd/key.dart';
 import 'dart:convert';
 import 'package:wotd/models/word.dart';
+import 'package:wotd/models/saved_words.dart';
 
 var now = new DateTime.now();
 var formatter = new DateFormat('yyyy-MM-dd');
@@ -29,12 +30,14 @@ Future<Word> fetchWord() async {
 }
 
 class Main extends StatefulWidget {
+  static final _savedWords = SavedWords.savedWords;
   @override
   _MainState createState() => _MainState();
 }
 
 class _MainState extends State<Main> {
   Future<Word> futureWord;
+  var _savedWords = Main._savedWords;
   @override
   void initState() {
     super.initState();
@@ -101,7 +104,8 @@ class _MainState extends State<Main> {
                             color: Colors.black,
                             fontWeight: FontWeight.w300,
                           ),
-                        )
+                        ),
+                        buildRow(snapshot.data.word),
                       ],
                     );
                   } else if (snapshot.hasError) {
@@ -116,6 +120,35 @@ class _MainState extends State<Main> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildRow(word) {
+    final alreadySaved = _savedWords.contains(word);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Icon(Icons.share),
+        IconButton(
+          icon: Icon(
+            alreadySaved ? Icons.favorite : Icons.favorite_border,
+            color: alreadySaved ? Colors.red : null,
+          ),
+          onPressed: () => {
+            setState(() {
+              if (alreadySaved) {
+                print('Removing: ' + word);
+                _savedWords.remove(word);
+                print(_savedWords);
+              } else {
+                print('Adding: ' + word);
+                _savedWords.add(word);
+                print(_savedWords);
+              }
+            })
+          },
+        ),
+      ],
     );
   }
 }
